@@ -5,6 +5,7 @@ import { icon } from '../icons.js';
 import { isLoggedIn, registrationOpen } from '../session.js';
 import { avatar } from '../ui.js';
 import { t } from '../i18n.js';
+import { localePath } from '../seo.js';
 
 /** Main buttons depending on the state (signed in, registration open). */
 function ctaButtons({ large = true } = {}) {
@@ -14,7 +15,7 @@ function ctaButtons({ large = true } = {}) {
     : registrationOpen()
       ? h('a', { class: ['btn btn-primary', size], href: '/signup' }, t('landing.cta.sign_up_free'), icon('arrow-right', { size: 17 }))
       : h('a', { class: ['btn btn-primary', size], href: '/login' }, icon('login', { size: 17 }), t('common.sign_in'));
-  const secondary = h('a', { class: ['btn btn-outline', size], href: '/download' }, icon('download', { size: 17 }), t('common.download'));
+  const secondary = h('a', { class: ['btn btn-outline', size], href: localePath('/download') }, icon('download', { size: 17 }), t('common.download'));
   return [primary, secondary];
 }
 
@@ -148,7 +149,7 @@ export function render() {
   const hero = h('section', { class: 'hero' },
     h('div', { class: 'container hero-grid' },
       h('div', { class: 'hero-copy' },
-        h('a', { class: 'eyebrow-pill', href: '/pricing' }, h('span', { class: 'badge badge-solid' }, t('landing.hero.badge')), t('landing.hero.pill'), icon('chevron-right', { size: 15 })),
+        h('a', { class: 'eyebrow-pill', href: localePath('/pricing') }, h('span', { class: 'badge badge-solid' }, t('landing.hero.badge')), t('landing.hero.pill'), icon('chevron-right', { size: 15 })),
         h('h1', { class: 'hero-title', tabindex: '-1', dataset: { pageTitle: '' } }, t('landing.hero.title'), ' ', h('span', { class: 'grad' }, t('landing.hero.title_highlight'))),
         h('p', { class: 'hero-lead' }, t('landing.hero.lead')),
         h('div', { class: 'hero-cta' }, ctaButtons()),

@@ -11,13 +11,14 @@ import { avatar, badge, dropdown, toast, toastError, busy, languagePicker } from
 import { themeSwitch, getTheme, setTheme } from './theme.js';
 import { t, tx, has } from './i18n.js';
 import { LEGAL_DOCS, legalPath } from './legal.js';
+import { localePath } from './seo.js';
 
 const root = () => document.getElementById('app');
 
 let current = null; // {type, main, update}
 
 function brand(href = '/') {
-  return h('a', { class: 'brand', href, 'aria-label': t('layout.brand_home') },
+  return h('a', { class: 'brand', href: localePath(href), 'aria-label': t('layout.brand_home') },
     h('img', { src: '/assets/icon.svg', alt: '', width: 30, height: 30 }),
     h('span', { class: 'brand-name' }, 'Term', h('span', null, 'oak')));
 }
@@ -35,10 +36,11 @@ function skipLink() {
 
 // --- Public layout -----------------------------------------------------------
 
+// Links of the public pages go to the current language's URL (`/es/pricing`).
 const publicNav = () => [
-  ['/#features', t('nav.features'), 'features'],
-  ['/pricing', t('nav.pricing'), 'pricing'],
-  ['/download', t('nav.download'), 'download'],
+  [localePath('/#features'), t('nav.features'), 'features'],
+  [localePath('/pricing'), t('nav.pricing'), 'pricing'],
+  [localePath('/download'), t('nav.download'), 'download'],
 ];
 
 function publicHeader(active) {
@@ -98,9 +100,9 @@ function publicFooter() {
       h('div', { class: 'footer-grid' },
         h('div', { class: 'footer-about' }, brand('/'), h('p', null, t('layout.footer.tagline'))),
         h('div', null, h('h3', null, t('layout.footer.product')), h('ul', null,
-          h('li', null, h('a', { href: '/#features' }, t('nav.features'))),
-          h('li', null, h('a', { href: '/pricing' }, t('nav.pricing'))),
-          h('li', null, h('a', { href: '/download' }, t('nav.download'))))),
+          h('li', null, h('a', { href: localePath('/#features') }, t('nav.features'))),
+          h('li', null, h('a', { href: localePath('/pricing') }, t('nav.pricing'))),
+          h('li', null, h('a', { href: localePath('/download') }, t('nav.download'))))),
         h('div', null, h('h3', null, t('layout.footer.account')), h('ul', null,
           logged
             ? h('li', null, h('a', { href: '/app' }, t('layout.my_account')))
@@ -111,7 +113,7 @@ function publicFooter() {
             ])),
         h('div', null, h('h3', null, t('layout.footer.support')), h('ul', null, support)),
         h('div', null, h('h3', null, t('layout.footer.legal')), h('ul', null,
-          Object.values(LEGAL_DOCS).map((doc) => h('li', null, h('a', { href: doc.path }, t(doc.title))))))),
+          Object.keys(LEGAL_DOCS).map((id) => h('li', null, h('a', { href: legalPath(id) }, t(LEGAL_DOCS[id].title))))))),
       h('div', { class: 'footer-bottom' },
         h('span', null,
           `© ${new Date().getFullYear()} `,
@@ -127,7 +129,7 @@ function authShell(content) {
   const info = state.info || {};
   return h('div', { class: 'auth' },
     skipLink(),
-    h('div', { class: 'auth-top' }, brand('/'), h('a', { class: 'btn btn-ghost btn-sm', href: '/' }, icon('arrow-left', { size: 15 }), t('common.back'))),
+    h('div', { class: 'auth-top' }, brand('/'), h('a', { class: 'btn btn-ghost btn-sm', href: localePath('/') }, icon('arrow-left', { size: 15 }), t('common.back'))),
     h('main', { class: 'auth-main', id: 'content' }, content),
     h('div', { class: 'auth-bottom' },
       `Termoak ${info.version || ''}`,
@@ -172,7 +174,7 @@ function userMenu(placement) {
       { label: t('layout.menu.security'), icon: 'shield', href: '/app/account/security' },
       { label: t('layout.menu.ai'), icon: 'sparkles', href: '/app/account/ai' },
       { label: t('layout.menu.plan'), icon: 'card', href: '/app/account/plan' },
-      { label: t('layout.download_apps'), icon: 'download', href: '/download' },
+      { label: t('layout.download_apps'), icon: 'download', href: localePath('/download') },
       { separator: true },
       { header: t('theme.title') },
       ...[['system', t('theme.system'), 'monitor'], ['dark', t('theme.dark'), 'moon'], ['light', t('theme.light'), 'sun']].map(([value, label, ico]) => ({
@@ -231,7 +233,7 @@ function appShell() {
     h('div', { class: 'sidebar-promo' },
       h('strong', null, t('layout.promo.title')),
       h('span', null, t('layout.promo.text')),
-      h('a', { class: 'btn btn-outline btn-sm', href: '/download' }, icon('download', { size: 15 }), t('layout.download_apps'))),
+      h('a', { class: 'btn btn-outline btn-sm', href: localePath('/download') }, icon('download', { size: 15 }), t('layout.download_apps'))),
     userSlot);
   const menuBtn = h('button', { class: 'btn btn-ghost btn-icon', type: 'button', 'aria-label': t('layout.menu_open'), 'aria-controls': 'sidebar', 'aria-expanded': 'false' }, icon('menu', { size: 20 }));
   const topbar = h('div', { class: 'app-topbar' }, menuBtn, brand('/app'), userSlotTop);

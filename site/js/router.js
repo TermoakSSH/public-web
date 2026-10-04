@@ -4,6 +4,13 @@
 // (dynamic import), the layout it uses and whether it requires a session.
 // Internal links are intercepted so the page doesn't reload; since the
 // server returns index.html on those routes, reloading works too.
+//
+// Public pages also exist under a language prefix (`/es/pricing`, see
+// seo.js): the prefix is split off before matching, and the page gets the
+// language in `ctx.lang` (`null` without a prefix) and the path without it
+// in `ctx.basePath`.
+
+import { splitLanguagePath } from './seo.js';
 
 let routes = [];
 let hooks = {};
@@ -23,16 +30,21 @@ function compile(pattern) {
   return { regex: new RegExp(`^${re}/?$`), names };
 }
 
-/** Finds the route for a URL path. */
+/**
+ * Finds the route for a URL path: `{route, params, lang, path}`, where `lang`
+ * is the language of the URL prefix (or `null`) and `path` the path without
+ * it.
+ */
 export function match(pathname) {
+  const { lang, path } = splitLanguagePath(pathname);
   for (const r of routes) {
-    const m = r.compiled.regex.exec(pathname);
+    const m = r.compiled.regex.exec(path);
     if (m) {
       const params = {};
       r.compiled.names.forEach((n, i) => {
         if (m[i + 1] !== undefined) params[n] = decodeURIComponent(m[i + 1]);
       });
-      return { route: r, params };
+      return { route: r, params, lang, path };
     }
   }
   return null;
@@ -55,8 +67,11 @@ export function safeNext(raw, fallback = '/app') {
   }
 }
 
-/** Navigates to another route of the web. */
-export function navigate(to, { replace = false } = {}) {
+/**
+ * Navigates to another route of the web. `render: false` only changes the
+ * URL (the caller renders, e.g. through a language change).
+ */
+export function navigate(to, { replace = false, render: draw = true } = {}) {
   const url = new URL(to, location.origin);
   if (url.origin !== location.origin) {
     location.href = to;
@@ -65,7 +80,7 @@ export function navigate(to, { replace = false } = {}) {
   const target = url.pathname + url.search + url.hash;
   if (replace) history.replaceState(null, '', target);
   else history.pushState(null, '', target);
-  render();
+  if (draw) render();
 }
 
 /** Removes parameters from the current URL without reloading (e.g. `token`). */
@@ -111,13 +126,19 @@ function isInternal(a) {
   return !!match(url.pathname);
 }
 
+// The first render keeps the scroll position (the page may have been
+// prerendered and scrolled before the script ran).
+let firstRender = true;
+
 async function render() {
   const seq = ++renderSeq;
   runCleanups();
   const url = new URL(location.href);
-  const found = match(url.pathname) || match('*');
+  const found = match(url.pathname) || matchNotFound(url.pathname);
   const ctx = {
     path: url.pathname,
+    basePath: found ? found.path : url.pathname,
+    lang: found ? found.lang : null,
     url,
     query: url.searchParams,
     params: found ? found.params : {},
@@ -133,6 +154,8 @@ async function render() {
     else console.error(e);
   }
   if (seq !== renderSeq) return;
+  const first = firstRender;
+  firstRender = false;
   // Anchor (`/#features`) or the top of the page.
   if (url.hash) {
     const el = document.getElementById(decodeURIComponent(url.hash.slice(1)));
@@ -141,7 +164,15 @@ async function render() {
       return;
     }
   }
-  window.scrollTo(0, 0);
+  if (!first) window.scrollTo(0, 0);
+}
+
+/** The catch-all route (`*`), keeping the language of the URL. */
+function matchNotFound(pathname) {
+  const found = match('*');
+  if (!found) return null;
+  const { lang, path } = splitLanguagePath(pathname);
+  return { ...found, lang, path };
 }
 
 /**

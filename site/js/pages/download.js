@@ -162,11 +162,12 @@ function connectHint() {
     copyField(location.origin, { label: t('download.connect.address') }));
 }
 
-export function render() {
+// The page waits for the list before showing up, so it is complete when it
+// replaces the previous one (or the prerendered HTML).
+export async function render() {
   const os = detectOS();
-  const body = h('div', null, loadingState(t('download.loading')));
+  const body = h('div');
   const load = async () => {
-    replace(body, loadingState(t('download.loading')));
     try {
       const data = await api.get('/downloads', { auth: false });
       const files = data.files || [];
@@ -205,11 +206,14 @@ export function render() {
           mobileSection(),
           connectHint()));
       } else {
-        replace(body, errorState(e, load));
+        replace(body, errorState(e, () => {
+          replace(body, loadingState(t('download.loading')));
+          load();
+        }));
       }
     }
   };
-  load();
+  await load();
   return h('div', null,
     h('section', { class: 'page-hero' },
       h('div', { class: 'container' },

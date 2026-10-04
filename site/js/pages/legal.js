@@ -10,7 +10,8 @@
 import { h } from '../dom.js';
 import { alertBox } from '../ui.js';
 import { t, getLanguage } from '../i18n.js';
-import { LEGAL_DOCS, LEGAL_VERSION, LEGAL_DATE } from '../legal.js';
+import { LEGAL_DOCS, LEGAL_VERSION, LEGAL_DATE, legalPath } from '../legal.js';
+import { localePath } from '../seo.js';
 
 const SOURCE = 'en';
 
@@ -27,10 +28,14 @@ const DROP = new Set([
   'img', 'picture', 'video', 'audio', 'source', 'canvas',
 ]);
 
-/** A link target that is safe to keep: same-site path, anchor, http(s) or mailto. */
+/**
+ * A link target that is safe to keep: same-site path (in the current
+ * language: `/privacy` → `/es/privacy`), anchor, http(s) or mailto.
+ */
 function safeHref(raw) {
   const v = (raw || '').trim();
-  if (v.startsWith('#') || (v.startsWith('/') && !v.startsWith('//') && !v.startsWith('/\\'))) return v;
+  if (v.startsWith('#')) return v;
+  if (v.startsWith('/') && !v.startsWith('//') && !v.startsWith('/\\')) return localePath(v);
   try {
     const url = new URL(v);
     if (['https:', 'http:', 'mailto:'].includes(url.protocol)) return url.href;
@@ -121,7 +126,7 @@ function formatDate(iso) {
 /** Links between the three documents. */
 function docNav(current) {
   return h('nav', { class: 'legal-nav', 'aria-label': t('legal.nav_label') },
-    Object.entries(LEGAL_DOCS).map(([id, doc]) => h('a', { href: doc.path, 'aria-current': id === current ? 'page' : null }, t(doc.title))));
+    Object.entries(LEGAL_DOCS).map(([id, doc]) => h('a', { href: legalPath(id), 'aria-current': id === current ? 'page' : null }, t(doc.title))));
 }
 
 async function renderDoc(id, ctx) {

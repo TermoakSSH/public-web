@@ -6,7 +6,8 @@
 // and is always loaded as the fallback. The server lists the available files
 // in `/assets/locales.json`, so adding a language only takes a new file.
 //
-// Language choice: the one saved in this browser → the signed-in account's
+// Language choice: the language of the URL on public pages (`/es/...`, see
+// seo.js) → the one saved in this browser → the signed-in account's
 // `locale` → the browser languages → English.
 //
 // Call `t()` when rendering, never at module load time: changing the language
@@ -137,16 +138,17 @@ async function apply(code) {
 
 /**
  * Loads the list of languages and the starting language. `accountLocale` is
- * the signed-in account's `locale`, if already known.
+ * the signed-in account's `locale`, if already known; `urlLanguage`, the
+ * language of the page's URL, which wins over everything else.
  */
-export async function initI18n(accountLocale = null) {
+export async function initI18n(accountLocale = null, urlLanguage = null) {
   try {
     const list = await fetchJson(`/assets/locales.json?v=${version()}`);
     if (Array.isArray(list) && list.length) available = list;
   } catch (e) {
     console.warn('locales', e);
   }
-  const code = savedLanguage() || matchLanguage(accountLocale) || browserLanguage();
+  const code = matchLanguage(urlLanguage) || savedLanguage() || matchLanguage(accountLocale) || browserLanguage();
   await apply(code);
 }
 
@@ -163,13 +165,14 @@ export function languages() {
 /**
  * Changes the language. `save`: remember it as an explicit choice (picker).
  * Listeners (see `onLanguageChange`) re-render the page and update the
- * account.
+ * account; `quiet` skips them (the caller is about to render).
  */
-export async function setLanguage(code, { save = true } = {}) {
+export async function setLanguage(code, { save = true, quiet = false } = {}) {
   const target = matchLanguage(code) || SOURCE;
   if (save) saveLanguage(target);
   if (target === lang) return;
   await apply(target);
+  if (quiet) return;
   for (const fn of [...listeners]) {
     try {
       fn(lang, { save });

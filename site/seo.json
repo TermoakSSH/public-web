@@ -1,0 +1,156 @@
+{
+  "_comment": "Search engine and link preview data of the public pages: titles, descriptions, languages, image and structured data (JSON-LD). Used by js/seo.js in the browser and by scripts/prerender.mjs at build time. A value like {\"en\": ..., \"es\": ...} is picked by language. Every page listed here exists in every language of `languages`, at its path (English) or under the language's prefix (/es/...).",
+  "origin": "https://termoak.com",
+  "site_name": "Termoak",
+  "default_language": "en",
+  "languages": {
+    "en": { "prefix": "", "og_locale": "en_US" },
+    "es": { "prefix": "/es", "og_locale": "es_ES" }
+  },
+  "image": {
+    "path": "/assets/og-image.png",
+    "width": 1200,
+    "height": 630,
+    "type": "image/png",
+    "alt": {
+      "en": "Termoak: the SSH client whose sessions never drop",
+      "es": "Termoak: el cliente SSH con sesiones que no se cortan"
+    }
+  },
+  "twitter_card": "summary_large_image",
+  "default": {
+    "title": {
+      "en": "Termoak · the SSH client whose sessions never drop",
+      "es": "Termoak · el cliente SSH con sesiones que no se cortan"
+    },
+    "description": {
+      "en": "Free, open-source SSH client for Windows, macOS, Linux, iOS and Android, with server sessions that never drop, session sharing, background AI and an encrypted vault.",
+      "es": "Cliente SSH gratuito y de código abierto para Windows, macOS, Linux, iOS y Android, con sesiones en el servidor que no se cortan, sesiones compartidas, IA y bóveda cifrada."
+    }
+  },
+  "pages": {
+    "/": {
+      "files": ["js/pages/landing.js"],
+      "priority": "1.0",
+      "structured_data": ["organization", "application"],
+      "title": {
+        "en": "Termoak · the SSH client whose sessions never drop",
+        "es": "Termoak · el cliente SSH con sesiones que no se cortan"
+      },
+      "description": {
+        "en": "Free, open-source SSH client for Windows, macOS, Linux, iOS and Android, with server sessions that never drop, session sharing, background AI and an encrypted vault.",
+        "es": "Cliente SSH gratuito y de código abierto para Windows, macOS, Linux, iOS y Android, con sesiones en el servidor que no se cortan, sesiones compartidas, IA y bóveda cifrada."
+      }
+    },
+    "/pricing": {
+      "files": ["js/pages/pricing.js"],
+      "priority": "0.8",
+      "structured_data": ["organization", "application"],
+      "title": {
+        "en": "Pricing · Termoak, free SSH client",
+        "es": "Precios · Termoak, cliente SSH gratuito"
+      },
+      "description": {
+        "en": "Termoak is free: encrypted sync, persistent server sessions, session sharing, teams, two-step verification and AI with your own API keys. No card required.",
+        "es": "Termoak es gratis: sincronización cifrada, sesiones persistentes en el servidor, sesiones compartidas, equipos, verificación en dos pasos e IA con tus claves. Sin tarjeta."
+      }
+    },
+    "/download": {
+      "files": ["js/pages/download.js"],
+      "priority": "0.8",
+      "structured_data": ["organization", "application"],
+      "title": {
+        "en": "Download Termoak for Windows, macOS, Linux, iOS and Android",
+        "es": "Descarga Termoak para Windows, macOS, Linux, iOS y Android"
+      },
+      "description": {
+        "en": "Download the Termoak SSH client for Windows, macOS and Linux, the iOS and Android apps, the self-hosted server and the command-line tool. Free and open source.",
+        "es": "Descarga el cliente SSH Termoak para Windows, macOS y Linux, las apps de iOS y Android, el servidor autoalojado y la herramienta de línea de comandos. Gratis y libre."
+      }
+    },
+    "/terms": {
+      "files": ["legal/{lang}/terms.html", "js/legal.js"],
+      "priority": "0.3",
+      "structured_data": ["organization"],
+      "og_type": "article",
+      "title": {
+        "en": "Terms of Use · Termoak",
+        "es": "Condiciones de uso · Termoak"
+      },
+      "description": {
+        "en": "The rules for using Termoak and the termoak.com service, provided by Ohz Digital SL: your account, acceptable use, plans, liability and how these terms change.",
+        "es": "Las normas para usar Termoak y el servicio de termoak.com, prestado por Ohz Digital SL: tu cuenta, uso aceptable, planes, responsabilidad y cómo cambian estas condiciones."
+      }
+    },
+    "/privacy": {
+      "files": ["legal/{lang}/privacy.html", "js/legal.js"],
+      "priority": "0.3",
+      "structured_data": ["organization"],
+      "og_type": "article",
+      "title": {
+        "en": "Privacy Policy · Termoak",
+        "es": "Política de privacidad · Termoak"
+      },
+      "description": {
+        "en": "How Ohz Digital SL handles your personal data when you use Termoak and termoak.com: what we collect, why, who it is shared with, for how long and your rights.",
+        "es": "Cómo trata Ohz Digital SL tus datos personales cuando usas Termoak y termoak.com: qué recogemos, para qué, con quién se comparten, durante cuánto tiempo y tus derechos."
+      }
+    },
+    "/legal": {
+      "files": ["legal/{lang}/legal.html", "js/legal.js"],
+      "priority": "0.3",
+      "structured_data": ["organization"],
+      "og_type": "article",
+      "title": {
+        "en": "Legal notice · Termoak",
+        "es": "Aviso legal · Termoak"
+      },
+      "description": {
+        "en": "Legal information about termoak.com and its owner, Ohz Digital SL (Bilbao, Spain): company details, contact, intellectual property and applicable law.",
+        "es": "Información legal de termoak.com y de su titular, Ohz Digital SL (Bilbao, España): datos de la empresa, contacto, propiedad intelectual y legislación aplicable."
+      }
+    }
+  },
+  "structured_data": {
+    "organization": {
+      "@type": "Organization",
+      "@id": "https://termoak.com/#organization",
+      "name": "Ohz Digital SL",
+      "url": "https://termoak.com/",
+      "logo": "https://termoak.com/assets/icons/icon-512.png",
+      "email": "legal@termoak.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "García Salazar 2",
+        "postalCode": "48003",
+        "addressLocality": "Bilbao",
+        "addressRegion": "Bizkaia",
+        "addressCountry": "ES"
+      },
+      "sameAs": ["https://github.com/TermoakSSH"]
+    },
+    "application": {
+      "@type": "SoftwareApplication",
+      "@id": "https://termoak.com/#software",
+      "name": "Termoak",
+      "url": { "en": "https://termoak.com/", "es": "https://termoak.com/es/" },
+      "description": {
+        "en": "SSH client with persistent server sessions, session sharing, background AI and an encrypted vault, for desktop and mobile, with an optional self-hosted server.",
+        "es": "Cliente SSH con sesiones persistentes en el servidor, sesiones compartidas, IA en segundo plano y bóveda cifrada, para escritorio y móvil, con servidor autoalojado opcional."
+      },
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, macOS, Linux, iOS, Android",
+      "downloadUrl": { "en": "https://termoak.com/download", "es": "https://termoak.com/es/download" },
+      "image": "https://termoak.com/assets/og-image.png",
+      "isAccessibleForFree": true,
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "publisher": { "@id": "https://termoak.com/#organization" },
+      "sameAs": ["https://github.com/TermoakSSH"]
+    }
+  }
+}

@@ -7,6 +7,8 @@
 // again, raise LEGAL_VERSION (the sign-up page sends it with the acceptance,
 // and the server records it).
 
+import { localePath } from './seo.js';
+
 /** Version of the documents accepted at sign-up (`terms_version`). */
 export const LEGAL_VERSION = '1.0';
 
@@ -20,7 +22,7 @@ export const LEGAL_DOCS = {
   legal: { path: '/legal', file: 'legal', title: 'legal.legal.title' },
 };
 
-/** Path of a document's page (`/terms`...). */
+/** Path of a document's page in the current language (`/terms`, `/es/terms`...). */
 export function legalPath(id) {
-  return LEGAL_DOCS[id].path;
+  return localePath(LEGAL_DOCS[id].path);
 }

@@ -89,20 +89,24 @@ export function faq(items = FAQ_IDS.map((id) => [t(`pricing.faq.${id}.q`), t(`pr
       h('p', null, a))));
 }
 
-export function render() {
-  const grid = h('div', null, loadingState(t('pricing.loading')));
+// The page waits for the plans before showing up, so it is complete when
+// it replaces the previous one (or the prerendered HTML).
+export async function render() {
+  const grid = h('div');
   const load = async () => {
-    replace(grid, loadingState(t('pricing.loading')));
     try {
       const data = await loadPlans();
       const currentPlan = state.me ? state.me.user.plan : null;
       replace(grid, h('div', { class: 'plans-grid' },
         data.plans.map((p) => planCard(p, { current: currentPlan === p.id }))));
     } catch (e) {
-      replace(grid, errorState(e, load));
+      replace(grid, errorState(e, () => {
+        replace(grid, loadingState(t('pricing.loading')));
+        load();
+      }));
     }
   };
-  load();
+  await load();
   return h('div', null,
     h('section', { class: 'page-hero' },
       h('div', { class: 'container' },

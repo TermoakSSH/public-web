@@ -5,7 +5,9 @@
 import { h, clear, uid } from './dom.js';
 import { icon } from './icons.js';
 import { relTime, absTime, initials, hue } from './format.js';
-import { t, tx, errorText, languages, getLanguage, setLanguage } from './i18n.js';
+import { t, tx, errorText, languages, getLanguage, setLanguage, matchLanguage } from './i18n.js';
+import { match, navigate, refresh } from './router.js';
+import { isLocalizedPath, localePath } from './seo.js';
 
 // --- Toasts ---------------------------------------------------------------
 
@@ -564,6 +566,30 @@ export function dropdown({ button, items, placement = 'down', className = '' }) 
  * Language picker: a `<select>` with every available language (by its
  * `language.name`). Changing it switches the language (see app.js).
  */
+/**
+ * The person picks a language: on a public page with a URL per language,
+ * go to that language's URL (`/pricing` ↔ `/es/pricing`) and remember the
+ * choice; elsewhere, only the latter.
+ */
+async function switchLanguage(code) {
+  const found = match(location.pathname);
+  if (found && isLocalizedPath(found.path)) {
+    const target = localePath(found.path, matchLanguage(code) || code) + location.search + location.hash;
+    if (target !== location.pathname + location.search + location.hash) {
+      // The language change re-renders the page, already at its new URL
+      // (replacing the current one: Back leaves the page, it does not
+      // switch the language again).
+      navigate(target, { replace: true, render: false });
+      if ((matchLanguage(code) || code) === getLanguage()) {
+        await setLanguage(code);
+        refresh();
+        return;
+      }
+    }
+  }
+  await setLanguage(code);
+}
+
 export function languagePicker({ id, small = false, label = true } = {}) {
   const select = h('select', {
     id: id || uid('lang'),
@@ -572,7 +598,7 @@ export function languagePicker({ id, small = false, label = true } = {}) {
   }, languages().map((l) => h('option', { value: l.code, lang: l.code, selected: l.code === getLanguage() }, l.name)));
   select.value = getLanguage();
   select.addEventListener('change', () => {
-    setLanguage(select.value).catch((e) => toastError(e));
+    switchLanguage(select.value).catch((e) => toastError(e));
   });
   return select;
 }

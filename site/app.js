@@ -8,6 +8,11 @@
 // downloads and the legal documents. On termoak.com it is deployed together with the web app
 // (sign-in, the signed-in app and the administration, TermoakSSH/web), which
 // adds its pages through js/ext.js: see loadExtension().
+//
+// The public pages (those in seo.json) also exist in Spanish under /es/ and
+// may come prerendered from the build (scripts/prerender.mjs): the HTML
+// already has the page, and the first render replaces it with an identical
+// one without showing a loading screen in between (`hydrating`).
 
 import { h } from './js/dom.js';
 import { api, onAuthLost } from './js/api.js';
@@ -18,13 +23,15 @@ import { applyTheme } from './js/theme.js';
 import { toast, loadingState, emptyState, capitalize } from './js/ui.js';
 import { icon } from './js/icons.js';
 import { t, errorText, initI18n, addLocaleBundle, setLanguage, onLanguageChange, savedLanguage, matchLanguage, getLanguage } from './js/i18n.js';
+import { loadSeo, updateHead, isLocalizedPath, localePath, splitLanguagePath } from './js/seo.js';
 
 applyTheme();
 
 const page = (file, name = 'render') => ({ load: () => import(`./js/pages/${file}`), export: name });
 
 // Routes of the web. `layout`: public | auth | app | bare. `title`: key of
-// the page title.
+// the page title. The ones listed in seo.json are public pages, with a URL
+// per language and their own head tags.
 const ROUTES = [
   { path: '/', ...page('landing.js'), layout: 'public', nav: 'home' },
   { path: '/pricing', ...page('pricing.js'), layout: 'public', nav: 'pricing', title: 'title.pricing' },
@@ -103,13 +110,10 @@ function setTitle(title) {
   document.title = title ? t('title.format', { title }) : t('title.default');
 }
 
-// Description meta tags in the current language.
-function setMeta() {
-  for (const sel of ['meta[name="description"]', 'meta[property="og:description"]']) {
-    const el = document.querySelector(sel);
-    if (el) el.setAttribute('content', t('meta.description'));
-  }
-}
+// The page came prerendered: until the first page is mounted, keep it on
+// screen instead of a loading indicator.
+const prerendered = document.getElementById('app').hasAttribute('data-prerendered');
+let hydrating = prerendered;
 
 function loginRedirect(ctx) {
   navigate(`/login?next=${encodeURIComponent(ctx.path + ctx.url.search)}`, { replace: true });
@@ -117,6 +121,22 @@ function loginRedirect(ctx) {
 
 async function renderRoute(ctx) {
   const r = ctx.route;
+  const localized = !r.notFound && isLocalizedPath(r.path);
+  // The language of the URL (`/es/...`) wins.
+  if (ctx.lang && ctx.lang !== getLanguage()) {
+    await setLanguage(ctx.lang, { save: false, quiet: true });
+    if (!ctx.alive()) return;
+  }
+  // Public pages go to the URL of the current language (`/pricing` →
+  // `/es/pricing` for someone who reads Spanish); other pages have no
+  // language prefix (`/es/login` → `/login`, in Spanish).
+  if (!r.notFound) {
+    const target = localized ? localePath(ctx.basePath) : ctx.basePath;
+    if (target !== ctx.path) {
+      navigate(target + ctx.url.search + ctx.url.hash, { replace: true });
+      return;
+    }
+  }
   // Pages only for signed-out visitors (login, sign-up).
   if (r.guest && isLoggedIn()) {
     navigate(safeNext(ctx.query.get('next')), { replace: true });
@@ -141,6 +161,7 @@ async function renderRoute(ctx) {
     if (!ctx.alive()) return;
   }
   setTitle(r.title ? t(r.title) : null);
+  updateHead({ path: localized ? ctx.basePath : null });
   ctx.setTitle = setTitle;
   const opts = { nav: r.nav, full: r.full, userId: state.me ? state.me.user.id : null };
   if (r.admin && !(state.me && state.me.user.is_admin)) {
@@ -153,7 +174,7 @@ async function renderRoute(ctx) {
   if (result instanceof Promise) {
     // If the page is slow, show an indicator in the meantime.
     const timer = setTimeout(() => {
-      if (ctx.alive()) mount(r.layout, loadingState(), opts);
+      if (ctx.alive() && !hydrating) mount(r.layout, loadingState(), opts);
     }, 150);
     const content = await result.finally(() => clearTimeout(timer));
     if (!ctx.alive() || !content) return;
@@ -203,7 +224,6 @@ onExternalSignOut(() => {
 // the person's choice, save it in the account (used for emails).
 let routerStarted = false;
 onLanguageChange((lang, { save }) => {
-  setMeta();
   if (save && isLoggedIn()) {
     api.patch('/me', { locale: lang })
       .then(() => {
@@ -218,27 +238,33 @@ onLanguageChange((lang, { save }) => {
 });
 
 // Without an explicit choice in this browser, the account's language wins
-// (e.g. after signing in).
+// (e.g. after signing in), except on a page whose URL has a language.
 subscribe(() => {
   const locale = state.me && state.me.user && state.me.user.locale;
-  if (!locale || savedLanguage()) return;
+  if (!locale || savedLanguage() || splitLanguagePath(location.pathname).lang) return;
   const lang = matchLanguage(locale);
   if (lang && lang !== getLanguage()) setLanguage(lang, { save: false }).catch(() => {});
 });
 
 async function boot() {
   const app = document.getElementById('app');
-  const ext = await loadExtension();
+  const [ext] = await Promise.all([loadExtension(), loadSeo(assetVersion())]);
+  const urlLang = splitLanguagePath(location.pathname).lang;
   // With a session, the account (and its language) is loaded at the same
   // time as the server information.
-  const me = isLoggedIn() && !savedLanguage() ? loadMe().catch(() => null) : Promise.resolve(null);
+  const me = isLoggedIn() && !savedLanguage() && !urlLang ? loadMe().catch(() => null) : Promise.resolve(null);
   try {
     await Promise.all([
-      me.then((account) => initI18n(account && account.user ? account.user.locale : null)),
+      me.then((account) => initI18n(account && account.user ? account.user.locale : null, urlLang)),
       loadInfo(),
     ]);
   } catch (e) {
-    await initI18n().catch(() => {});
+    // A prerendered page stays readable without the server.
+    if (prerendered) {
+      console.warn('boot', e);
+      return;
+    }
+    await initI18n(null, urlLang).catch(() => {});
     app.replaceChildren(h('div', { class: 'boot' },
       h('div', { class: 'stack center' },
         h('img', { src: '/assets/icon.svg', alt: '', width: 56, height: 56, class: 'boot-logo' }),
@@ -247,9 +273,18 @@ async function boot() {
         h('div', null, h('button', { class: 'btn btn-primary', type: 'button', onclick: () => location.reload() }, t('common.retry'))))));
     return;
   }
-  setMeta();
   routerStarted = true;
-  startRouter(routeTable(ext), { render: renderRoute, error: renderError });
+  startRouter(routeTable(ext), {
+    render: async (ctx) => {
+      try {
+        await renderRoute(ctx);
+      } finally {
+        // Mounted (or failed): from now on, the usual loading indicator.
+        if (ctx.alive()) hydrating = false;
+      }
+    },
+    error: renderError,
+  });
 }
 
 boot();

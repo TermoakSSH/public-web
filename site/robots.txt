@@ -1,0 +1,19 @@
+# termoak.com: the public pages (landing, pricing, downloads, legal, in
+# English and under /es/ in Spanish) may be indexed; the sign-in pages, the
+# web app, the API and the update downloads may not.
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /login
+Disallow: /signup
+Disallow: /check-email
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /confirm-email
+Disallow: /invite/
+Disallow: /join/
+Disallow: /api/
+Disallow: /updates/
+
+Sitemap: https://termoak.com/sitemap.xml
