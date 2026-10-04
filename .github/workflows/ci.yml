@@ -1,0 +1,26 @@
+name: CI
+
+# Translations and JavaScript syntax. Public repository: GitHub Actions
+# minutes are free.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Translations
+        run: python3 scripts/check-locales.py site/locales
+      - name: JavaScript syntax
+        run: |
+          for f in $(git ls-files 'site/*.js'); do
+            cp "$f" /tmp/check.mjs && node --check /tmp/check.mjs || { echo "::error file=$f::syntax error"; exit 1; }
+          done
