@@ -863,3 +863,114 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* --- Legal documents (terms, privacy, legal notice) ------------------------ */
+
+.legal-page {
+  padding-top: 40px;
+}
+
+.legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 32px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-nav a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--text-2);
+  font-size: 0.92rem;
+}
+
+.legal-nav a:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+.legal-nav a[aria-current="page"] {
+  color: var(--accent-text);
+  background: var(--accent-soft);
+}
+
+.legal {
+  color: var(--text-2);
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.legal h1 {
+  color: var(--text);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  letter-spacing: -0.03em;
+}
+
+.legal-meta {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.legal-fallback {
+  margin-top: 18px;
+}
+
+.legal h2 {
+  color: var(--text);
+  margin: 40px 0 12px;
+  scroll-margin-top: 90px;
+}
+
+.legal h3 {
+  color: var(--text);
+  margin: 26px 0 8px;
+}
+
+.legal p,
+.legal ul,
+.legal ol,
+.legal table {
+  margin: 0 0 14px;
+}
+
+.legal-meta + p,
+.legal-fallback + p {
+  margin-top: 24px;
+}
+
+.legal ul,
+.legal ol {
+  padding-left: 1.4em;
+}
+
+.legal li + li {
+  margin-top: 6px;
+}
+
+.legal strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.legal a {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-border);
+}
+
+.legal th,
+.legal td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .legal-page {
+    padding-top: 24px;
+  }
+}

@@ -4,8 +4,8 @@
 // renders each page in its layout. Pages are loaded on demand (dynamic
 // import) from js/pages/.
 //
-// This is the public site (TermoakSSH/public-web): landing, pricing and
-// downloads. On termoak.com it is deployed together with the web app
+// This is the public site (TermoakSSH/public-web): landing, pricing,
+// downloads and the legal documents. On termoak.com it is deployed together with the web app
 // (sign-in, the signed-in app and the administration, TermoakSSH/web), which
 // adds its pages through js/ext.js: see loadExtension().
 
@@ -29,6 +29,9 @@ const ROUTES = [
   { path: '/', ...page('landing.js'), layout: 'public', nav: 'home' },
   { path: '/pricing', ...page('pricing.js'), layout: 'public', nav: 'pricing', title: 'title.pricing' },
   { path: '/download', ...page('download.js'), layout: 'public', nav: 'download', title: 'title.download' },
+  { path: '/terms', ...page('legal.js', 'terms'), layout: 'public', title: 'title.terms' },
+  { path: '/privacy', ...page('legal.js', 'privacy'), layout: 'public', title: 'title.privacy' },
+  { path: '/legal', ...page('legal.js', 'legal'), layout: 'public', title: 'title.legal' },
 ];
 
 // Last route: anything else.

@@ -18,6 +18,7 @@ the downloads page).
 | `site/js/pages/` | Landing, pricing and downloads |
 | `site/css/` | Styles |
 | `site/locales/<lang>.json` | Translations |
+| `site/legal/<lang>/` | Terms of Use, Privacy Policy and Legal notice (`terms.html`, `privacy.html`, `legal.html`), shown at `/terms`, `/privacy` and `/legal` (English when a language has no copy). Their version and date are in `site/js/legal.js` |
 
 ## Running it locally
 

@@ -1,0 +1,249 @@
+<!-- Política de privacidad de Termoak, en español. La muestra js/pages/legal.js,
+     que solo conserva etiquetas básicas (títulos, párrafos, listas, enlaces y
+     tablas) y añade la versión y la fecha de js/legal.js. -->
+<h1>Política de privacidad</h1>
+
+<p>Esta política explica qué datos personales trata Termoak, para qué, con
+quién se comparten y qué derechos tienes. En resumen: solo usamos tus datos
+para prestarte el servicio, no los vendemos y en Termoak no hay publicidad ni
+rastreo.</p>
+
+<h2 id="controller">1. Quién es responsable de tus datos</h2>
+<p>El responsable del tratamiento es <strong>Ohz Digital SL</strong> («Ohz»,
+«nosotros»), con CIF B56646771 y domicilio en García Salazar 2, 48003 Bilbao,
+Bizkaia, España. Para cualquier cuestión de privacidad o para ejercer tus
+derechos, escríbenos a <a href="mailto:legal@termoak.com">legal@termoak.com</a>.</p>
+
+<h2 id="scope">2. Qué abarca esta política</h2>
+<p>Abarca el sitio web <a href="https://termoak.com">termoak.com</a>, tu cuenta
+de Termoak y el servidor de Termoak que gestionamos allí, al que se conectan
+las aplicaciones cuando inicias sesión con esa cuenta. No abarca:</p>
+<ul>
+  <li>las aplicaciones usadas <strong>sin cuenta</strong>: en ese caso tus datos
+    se quedan en tu dispositivo y no los recibimos;</li>
+  <li>los servidores de Termoak que gestionan otras personas o empresas
+    (autoalojados): quien los gestiona es responsable de los datos que
+    contienen;</li>
+  <li>los servidores a los que te conectas por SSH, ni los proveedores de IA
+    que uses con tu propia clave de API, que tienen sus propias
+    políticas.</li>
+</ul>
+
+<h2 id="data">3. Qué datos tratamos y para qué</h2>
+
+<h3>Tu cuenta</h3>
+<ul>
+  <li>Tu dirección de email, tu nombre, tu idioma preferido (para los emails y
+    las notificaciones), tu plan y la fecha en que creaste la cuenta.</li>
+  <li>Tu contraseña, que nunca guardamos tal cual: solo guardamos un hash
+    Argon2id de ella.</li>
+  <li>Si activas la verificación en dos pasos, su secreto (cifrado con la clave
+    del servidor) y tus códigos de recuperación (de cada uno solo guardamos un
+    hash).</li>
+  <li>Que aceptaste estas condiciones y esta política, con su versión y la
+    fecha.</li>
+</ul>
+
+<h3>Tus dispositivos</h3>
+<ul>
+  <li>De cada dispositivo en el que inicias sesión: su nombre, su plataforma
+    (por ejemplo, «Android» o «web»), cuándo inició sesión y cuándo se usó por
+    última vez. Los tokens de sesión solo se guardan como hashes.</li>
+  <li>Si activas las notificaciones en un móvil, su token de notificaciones de
+    Apple o Google.</li>
+</ul>
+
+<h3>Lo que sincronizas</h3>
+<p>Tus hosts, grupos, identidades, claves SSH, snippets, redirecciones de
+puertos, hosts conocidos y memorias de la IA, para que los tengas en todos tus
+dispositivos.</p>
+<ul>
+  <li>Sus secretos (contraseñas, claves privadas y frases de paso) se guardan
+    cifrados con XChaCha20-Poly1305, con una clave maestra que se guarda en
+    nuestro servidor. Viajan entre tus dispositivos y el servidor dentro de una
+    conexión cifrada (TLS).</li>
+  <li><strong>No es un cifrado de extremo a extremo</strong>: nuestro servidor
+    puede descifrar esos secretos, y lo necesita para abrir las sesiones de
+    servidor que pidas y para ejecutar las herramientas de la IA en tus hosts.
+    El resto de los datos (por ejemplo, la dirección y el usuario de un host)
+    se guardan sin ese cifrado adicional.</li>
+  <li>Lo que marques como <strong>«Solo en este dispositivo»</strong> nunca sale
+    de tu dispositivo: no se sincroniza y nuestro servidor nunca lo ve.</li>
+  <li>Revelar un secreto a través de la API queda registrado en el registro de
+    actividad.</li>
+</ul>
+
+<h3>Sesiones en el servidor</h3>
+<ul>
+  <li>Cuando abres una sesión en el servidor, la conexión SSH con tu host se
+    ejecuta en nuestro servidor, así que lo que escribes y lo que muestra el
+    terminal pasan por él. Mientras la sesión está abierta, guardamos en
+    memoria su salida reciente (el historial de pantalla) para que puedas
+    reconectarte desde cualquier dispositivo.</li>
+  <li>Guardamos un registro de cada sesión: el host, su título, su estado,
+    cuándo empezó y terminó y el error si falló; y de con quién la
+    compartiste, con qué permiso y hasta cuándo.</li>
+  <li>Las <strong>grabaciones</strong> están desactivadas por defecto. Si
+    grabas una sesión, guardamos su salida y, solo si está activada la
+    grabación de lo que se teclea, también lo que se escribe (en termoak.com
+    está desactivada, porque puede contener contraseñas).</li>
+</ul>
+
+<h3>Equipos</h3>
+<p>Los equipos que creas o a los que perteneces: su nombre, sus miembros y
+roles, y las invitaciones (con la dirección de email de la persona
+invitada).</p>
+
+<h3>IA</h3>
+<ul>
+  <li>Tus tareas de IA: lo que pides, la conversación, las acciones de la IA y
+    sus resultados (que pueden incluir la salida de tu terminal y el contenido
+    de los archivos que lee en tus hosts) y tus aprobaciones. Puedes borrar
+    cada tarea.</li>
+  <li>Un registro de uso de cada petición: el proveedor, los tokens usados, el
+    coste y si se usó tu propia clave.</li>
+  <li>Tus propias claves de API, cifradas con la clave del servidor. No se
+    vuelven a mostrar, solo sus 4 últimos caracteres.</li>
+</ul>
+
+<h3>Registro de actividad y seguridad</h3>
+<ul>
+  <li>Un registro de actividad (auditoría) de tu cuenta: los inicios de sesión
+    (con la <strong>dirección IP</strong>, el dispositivo y la plataforma), la
+    creación de la cuenta, las sesiones que abres y compartes, los comandos
+    que ejecuta la IA, los secretos revelados y los cambios en tus ajustes de
+    seguridad.</li>
+  <li>Para bloquear los intentos de adivinar contraseñas, contamos los inicios
+    de sesión fallidos por dirección de email y por dirección IP, en memoria,
+    durante 10 minutos.</li>
+</ul>
+
+<h3>Emails</h3>
+<p>Te enviamos los emails que necesita el servicio: confirmar tu dirección,
+restablecer tu contraseña, cambiar tu email e invitaciones. No te enviamos
+publicidad.</p>
+
+<h3>Cuando nos escribes</h3>
+<p>Si nos escribes, usamos tu mensaje y tu dirección de email para
+contestarte.</p>
+
+<h2 id="legal-basis">4. Por qué podemos hacerlo (bases legales)</h2>
+<ul>
+  <li><strong>Para prestarte el servicio que has pedido (contrato)</strong>: tu
+    cuenta, dispositivos, sincronización, sesiones, equipos, IA,
+    notificaciones y los emails del servicio. Algunas de estas funciones
+    (notificaciones, grabaciones, IA, compartir) solo se usan cuando las
+    activas.</li>
+  <li><strong>Nuestro interés legítimo</strong> en mantener seguros el servicio
+    y a sus usuarios y en evitar abusos: el registro de actividad con
+    direcciones IP, los límites de inicios de sesión fallidos y la
+    investigación de abusos. Puedes oponerte (consulta el apartado 8).</li>
+  <li><strong>Obligaciones legales</strong>: por ejemplo, conservar las
+    facturas de los planes de pago durante el tiempo que exige la normativa
+    fiscal, o atender los requerimientos de las autoridades conforme a la
+    ley.</li>
+</ul>
+
+<h2 id="sharing">5. Con quién los compartimos</h2>
+<p>No vendemos tus datos ni se los damos a nadie para publicidad. Solo usamos
+estos proveedores, y solo para lo que se describe:</p>
+<ul>
+  <li><strong>Alojamiento</strong>: el servicio funciona en servidores
+    gestionados por Ohz en España (UE).</li>
+  <li><strong>Brevo</strong> (UE) envía nuestros emails: recibe tu dirección
+    de email y el contenido del email.</li>
+  <li><strong>OpenAI</strong> presta la IA de Termoak (el crédito de IA del plan
+    Pro, cuando esté disponible, a través de Codex): recibe tus peticiones y el
+    contexto del terminal que necesita la IA. Esto supone una transferencia a
+    Estados Unidos (consulta el apartado 6).</li>
+  <li><strong>El proveedor de IA que elijas</strong>: si añades tu propia clave
+    de API (Anthropic, OpenAI, OpenRouter u OpenCode), tus peticiones de IA en
+    el servidor, con el contexto que necesitan, se envían a ese proveedor
+    siguiendo tus instrucciones, con sus condiciones y su política de
+    privacidad. En el modo «Este ordenador» de la aplicación de escritorio,
+    nada pasa por nuestros servidores.</li>
+  <li><strong>Apple y Google</strong>, si activas las notificaciones en un
+    móvil: las entregan con el token de notificaciones. Por defecto, el texto
+    de las notificaciones es genérico y no incluye comandos ni títulos.</li>
+  <li><strong>GitHub</strong> aloja el código libre de Termoak y los archivos de
+    sus versiones. Si visitas nuestros repositorios en GitHub, se aplica la
+    política de privacidad de GitHub.</li>
+  <li>Las <strong>personas con las que compartes</strong>: cuando compartes una
+    sesión o te unes a un equipo, las demás personas ven tu nombre y tu email y
+    lo que compartes con ellas.</li>
+  <li>Las <strong>autoridades</strong>, solo cuando la ley nos obligue.</li>
+</ul>
+
+<h2 id="transfers">6. Transferencias fuera de la UE</h2>
+<p>Guardamos tus datos en la UE. Solo salen de ella en estos casos:</p>
+<ul>
+  <li>La IA de Termoak, con OpenAI en Estados Unidos: amparada por el Marco de
+    Privacidad de Datos UE-EE. UU. y, cuando corresponda, por las cláusulas
+    contractuales tipo de la Comisión Europea.</li>
+  <li>El proveedor de IA que elijas con tu propia clave, y Apple o Google para
+    las notificaciones, cuando tratan datos fuera de la UE: ocurre porque usas
+    esos servicios, con sus condiciones.</li>
+</ul>
+
+<h2 id="retention">7. Cuánto tiempo los guardamos</h2>
+<ul>
+  <li>Los datos de tu cuenta, lo que sincronizas, tus sesiones, grabaciones,
+    equipos, tareas de IA y registro de actividad: <strong>mientras exista tu
+    cuenta</strong>. Puedes borrar tú mismo en cualquier momento las tareas de
+    IA, los elementos sincronizados y las claves de API.</li>
+  <li>Cuando <strong>eliminas tu cuenta</strong> (en los ajustes de tu cuenta:
+    Cuenta → Zona de peligro), borramos tus datos sincronizados, tus sesiones y
+    su historial, tus grabaciones, tus tareas y uso de IA, tus claves de API,
+    tu registro de actividad y los equipos de los que eras el único miembro.
+    Tus sesiones abiertas se cierran.</li>
+  <li>Los tokens de sesión caducan: el de acceso a los 60 minutos y el de
+    renovación a los 90 días sin uso. Los enlaces de los emails caducan a las
+    48 horas (confirmar tu dirección) o a la hora (restablecer tu
+    contraseña).</li>
+  <li>Los contadores de inicios de sesión fallidos: 10 minutos, en
+    memoria.</li>
+  <li>Los datos que la ley nos obliga a conservar (por ejemplo, las facturas de
+    los planes de pago): durante el plazo que exija la ley.</li>
+</ul>
+
+<h2 id="rights">8. Tus derechos</h2>
+<p>Tienes derecho a <strong>acceder</strong> a tus datos,
+<strong>rectificarlos</strong>, <strong>suprimirlos</strong>,
+<strong>limitar</strong> su tratamiento, llevártelos
+(<strong>portabilidad</strong>) y <strong>oponerte</strong> al tratamiento
+basado en nuestro interés legítimo. Muchas cosas puedes hacerlas tú mismo en
+la aplicación (cambiar tu nombre o tu email, borrar datos o eliminar la
+cuenta). Para todo lo demás, escribe a
+<a href="mailto:legal@termoak.com">legal@termoak.com</a>, preferiblemente desde
+la dirección de email de tu cuenta, para que podamos comprobar que eres tú. Te
+responderemos en el plazo de un mes.</p>
+<p>Si crees que no hemos tratado bien tus datos, puedes presentar una
+reclamación ante la Agencia Española de Protección de Datos (AEPD),
+<a href="https://www.aepd.es">www.aepd.es</a>. Te agradeceremos que nos lo
+digas antes, para intentar solucionarlo.</p>
+
+<h2 id="security">9. Seguridad</h2>
+<p>Las conexiones van cifradas (TLS); las contraseñas se guardan como hashes
+Argon2id; los secretos se guardan cifrados; los tokens y códigos se guardan
+como hashes; puedes usar la verificación en dos pasos; los intentos de inicio
+de sesión están limitados; y el sitio web solo carga código de nuestro propio
+servidor. El código es libre, así que cualquiera puede comprobar cómo funciona
+todo esto.</p>
+
+<h2 id="storage">10. Sin cookies y sin rastreo</h2>
+<p>El sitio web termoak.com no usa cookies, analítica ni publicidad, y no carga
+nada de terceros. Solo guarda en el almacenamiento local de tu navegador lo
+que necesita para funcionar: tu sesión (para que sigas con la sesión iniciada),
+tu idioma y tu tema (claro u oscuro). Este almacenamiento es estrictamente
+necesario para el servicio que pides, así que no necesita tu consentimiento y
+no hay banner de cookies. Se borra al cerrar la sesión (la sesión) o al borrar
+los datos de tu navegador.</p>
+
+<h2 id="minors">11. Edad mínima</h2>
+<p>Termoak no está dirigido a menores de 16 años, que no pueden crear una
+cuenta.</p>
+
+<h2 id="changes">12. Cambios en esta política</h2>
+<p>Si cambiamos esta política, publicaremos aquí la nueva versión con su fecha
+y, si los cambios son importantes, te avisaremos con antelación por email o en
+el sitio web.</p>

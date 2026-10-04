@@ -1,0 +1,233 @@
+<!-- Termoak Privacy Policy, English. Rendered by js/pages/legal.js, which keeps
+     only basic tags (headings, paragraphs, lists, links, tables) and shows the
+     version and date from js/legal.js. -->
+<h1>Privacy Policy</h1>
+
+<p>This policy explains what personal data Termoak processes, why, with whom
+it is shared and what rights you have. In short: we only use your data to
+provide the service, we do not sell it, and there is no advertising or
+tracking on Termoak.</p>
+
+<h2 id="controller">1. Who is responsible for your data</h2>
+<p>The controller is <strong>Ohz Digital SL</strong> ("Ohz", "we"), tax ID
+(CIF) B56646771, García Salazar 2, 48003 Bilbao, Bizkaia, Spain. For anything
+about privacy or to exercise your rights, write to
+<a href="mailto:legal@termoak.com">legal@termoak.com</a>.</p>
+
+<h2 id="scope">2. What this policy covers</h2>
+<p>It covers the website <a href="https://termoak.com">termoak.com</a>, your
+Termoak account and the Termoak server that we run there, which the apps
+connect to when you sign in with that account. It does not cover:</p>
+<ul>
+  <li>the apps used <strong>without an account</strong>: your data then stays
+    on your device and we do not receive it;</li>
+  <li>Termoak servers run by other people or companies (self-hosted): whoever
+    runs them is responsible for the data on them;</li>
+  <li>the servers you connect to over SSH, nor the AI providers you use with
+    your own API key, which have their own policies.</li>
+</ul>
+
+<h2 id="data">3. What data we process and why</h2>
+
+<h3>Your account</h3>
+<ul>
+  <li>Your email address, your name, your preferred language (used for emails
+    and notifications), your plan and the date you created the account.</li>
+  <li>Your password, which we never store as such: we only keep an Argon2id
+    hash of it.</li>
+  <li>If you turn on two-step verification, its secret (encrypted with the
+    server's key) and your recovery codes (we only keep a hash of each).</li>
+  <li>That you accepted these terms and this policy, with their version and
+    the date.</li>
+</ul>
+
+<h3>Your devices</h3>
+<ul>
+  <li>For each device you sign in on: its name, its platform (for example,
+    "Android" or "web"), when it signed in and when it was last used. The
+    session tokens are only stored as hashes.</li>
+  <li>If you turn on notifications on a phone, its push token from Apple or
+    Google.</li>
+</ul>
+
+<h3>What you sync</h3>
+<p>Your hosts, groups, identities, SSH keys, snippets, port forwards, known
+hosts and AI memories, so that you have them on all your devices.</p>
+<ul>
+  <li>Their secrets (passwords, private keys and passphrases) are stored
+    encrypted with XChaCha20-Poly1305, with a master key that is kept on our
+    server. They travel between your devices and the server inside an
+    encrypted (TLS) connection.</li>
+  <li><strong>This is not end-to-end encryption</strong>: our server can
+    decrypt these secrets, and needs to in order to open the sessions on the
+    server that you ask for and to run the AI tools on your hosts. The rest of
+    the data (for example, the address and the user name of a host) is
+    stored without that extra encryption.</li>
+  <li>Anything you mark as <strong>"This device only"</strong> never leaves
+    your device: it is not synced and our server never sees it.</li>
+  <li>Revealing a secret through the API is recorded in the activity log.</li>
+</ul>
+
+<h3>Sessions on the server</h3>
+<ul>
+  <li>When you open a session on the server, the SSH connection to your host
+    runs on our server, so what you type and what the terminal shows go
+    through it. While the session is open, we keep its recent output
+    (scrollback) in memory so you can reconnect from any device.</li>
+  <li>We keep a record of each session: the host, its title, its status, when
+    it started and ended and the error if it failed; and of who you shared it
+    with, with what permission and until when.</li>
+  <li><strong>Recordings</strong> are off by default. If you record a session,
+    we store its output, and only if recording of keyboard input is turned
+    on, also what is typed (it is off on termoak.com, because it can contain
+    passwords).</li>
+</ul>
+
+<h3>Teams</h3>
+<p>The teams you create or belong to: their name, their members and roles, and
+the invitations (with the email address of the person invited).</p>
+
+<h3>AI</h3>
+<ul>
+  <li>Your AI tasks: what you ask, the conversation, the actions of the AI and
+    their results (which may include the output of your terminal and the
+    contents of the files it reads on your hosts) and your approvals. You can
+    delete each task.</li>
+  <li>A usage record for each request: the provider, the tokens used, the cost
+    and whether it used your own key.</li>
+  <li>Your own API keys, encrypted with the server's key. They are never shown
+    again, only their last 4 characters.</li>
+</ul>
+
+<h3>Activity log and security</h3>
+<ul>
+  <li>An activity (audit) log of your account: sign-ins (with the
+    <strong>IP address</strong>, the device and the platform), the creation of
+    the account, the sessions you open and share, the commands run by the AI,
+    the secrets revealed and changes to your security settings.</li>
+  <li>To block attempts to guess passwords, we count failed sign-ins per email
+    address and per IP address, in memory, for 10 minutes.</li>
+</ul>
+
+<h3>Emails</h3>
+<p>We send you the emails the service needs: confirming your address,
+resetting your password, changing your email and invitations. We do not send
+you advertising.</p>
+
+<h3>When you write to us</h3>
+<p>If you write to us, we use your message and your email address to answer
+you.</p>
+
+<h2 id="legal-basis">4. Why we are allowed to (legal bases)</h2>
+<ul>
+  <li><strong>To provide the service you asked for (contract)</strong>: your
+    account, devices, sync, sessions, teams, AI, notifications and the
+    emails of the service. Some of these features (notifications, recordings,
+    AI, sharing) are only used when you turn them on.</li>
+  <li><strong>Our legitimate interest</strong> in keeping the service and its
+    users secure and preventing abuse: the activity log with IP addresses,
+    the limits on failed sign-ins and the investigation of abuse. You can
+    object to it (see section 8).</li>
+  <li><strong>Legal obligations</strong>: for example, keeping the invoices of
+    paid plans for the time tax law requires, or answering requests from the
+    authorities made in accordance with the law.</li>
+</ul>
+
+<h2 id="sharing">5. Who we share it with</h2>
+<p>We do not sell your data or give it to anyone for advertising. We only use
+these providers, and only for what is described:</p>
+<ul>
+  <li><strong>Hosting</strong>: the service runs on servers operated by Ohz
+    in Spain (EU).</li>
+  <li><strong>Brevo</strong> (EU) sends our emails: it receives your email
+    address and the content of the email.</li>
+  <li><strong>OpenAI</strong> provides Termoak AI (the AI credit of the Pro
+    plan, when available, through Codex): it receives your requests and the
+    terminal context the AI needs. This involves a transfer to the United
+    States (see section 6).</li>
+  <li><strong>The AI provider you choose</strong>: if you add your own API key
+    (Anthropic, OpenAI, OpenRouter or OpenCode), your server AI requests,
+    with the context they need, are sent to that provider on your
+    instructions, under its terms and its privacy policy. In the desktop
+    app's "This computer" mode, nothing goes through our servers.</li>
+  <li><strong>Apple and Google</strong>, if you turn on notifications on a
+    phone: they deliver them with the push token. By default the text of the
+    notifications is generic and does not include commands or titles.</li>
+  <li><strong>GitHub</strong> hosts the open-source code of Termoak and the
+    files of its releases. If you visit our repositories on GitHub, GitHub's
+    privacy policy applies.</li>
+  <li>The <strong>people you share with</strong>: when you share a session or
+    join a team, the other people see your name and email and what you
+    share with them.</li>
+  <li><strong>Authorities</strong>, only when the law requires us to.</li>
+</ul>
+
+<h2 id="transfers">6. Transfers outside the EU</h2>
+<p>We keep your data in the EU. It only leaves it in these cases:</p>
+<ul>
+  <li>Termoak AI, with OpenAI in the United States: covered by the EU-US Data
+    Privacy Framework and, where applicable, the standard contractual clauses
+    of the European Commission.</li>
+  <li>The AI provider you choose with your own key, and Apple or Google for
+    notifications, when they process data outside the EU: this happens
+    because you use those services, under their terms.</li>
+</ul>
+
+<h2 id="retention">7. How long we keep it</h2>
+<ul>
+  <li>Your account data, what you sync, your sessions, recordings, teams, AI
+    tasks and activity log: <strong>while your account exists</strong>. You
+    can delete AI tasks, synced items and API keys yourself at any time.</li>
+  <li>When you <strong>delete your account</strong> (in your account settings:
+    Account → Danger zone), we delete your synced data, your sessions and
+    their history, your recordings, your AI tasks and usage, your API keys,
+    your activity log and the teams where you were the only member. Your
+    open sessions are closed.</li>
+  <li>Session tokens expire: the access token after 60 minutes and the
+    refresh token after 90 days without use. Email links expire after
+    48 hours (confirming your address) or 1 hour (resetting your
+    password).</li>
+  <li>Failed sign-in counters: 10 minutes, in memory.</li>
+  <li>Data that we must keep by law (for example, invoices of paid plans): for
+    the period the law requires.</li>
+</ul>
+
+<h2 id="rights">8. Your rights</h2>
+<p>You have the right to <strong>access</strong> your data,
+<strong>rectify</strong> it, <strong>erase</strong> it, <strong>restrict</strong>
+its processing, take it with you (<strong>portability</strong>) and
+<strong>object</strong> to processing based on our legitimate interest. Many
+things you can do yourself in the app (change your name or email, delete
+data or delete the account). For anything else, write to
+<a href="mailto:legal@termoak.com">legal@termoak.com</a>, preferably from the
+email address of your account so that we can check that it is you. We will
+answer within one month.</p>
+<p>If you think we have not handled your data properly, you can file a
+complaint with the Spanish Data Protection Agency (AEPD),
+<a href="https://www.aepd.es">www.aepd.es</a>. We would appreciate it if you
+told us first, so we can try to fix it.</p>
+
+<h2 id="security">9. Security</h2>
+<p>Connections are encrypted (TLS); passwords are stored as Argon2id hashes;
+secrets are encrypted at rest; tokens and codes are stored as hashes; you can
+use two-step verification; sign-in attempts are limited; and the website only
+loads code from our own server. The code is open source, so anyone can check
+how all this works.</p>
+
+<h2 id="storage">10. No cookies, no tracking</h2>
+<p>The termoak.com website does not use cookies, analytics or advertising,
+and does not load anything from third parties. It only stores in your
+browser's local storage what it needs to work: your session (so that you stay
+signed in), your language and your theme (light or dark). This storage is
+strictly necessary for the service you ask for, so it does not need your
+consent and there is no cookie banner. It is deleted when you sign out (the
+session) or when you clear your browser's data.</p>
+
+<h2 id="minors">11. Minimum age</h2>
+<p>Termoak is not intended for people under 16, who may not create an
+account.</p>
+
+<h2 id="changes">12. Changes to this policy</h2>
+<p>If we change this policy, we will publish the new version here with its
+date and, if the changes are important, we will tell you in advance by email
+or on the website.</p>

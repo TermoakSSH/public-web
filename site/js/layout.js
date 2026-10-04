@@ -10,6 +10,7 @@ import { api } from './api.js';
 import { avatar, badge, dropdown, toast, toastError, busy, languagePicker } from './ui.js';
 import { themeSwitch, getTheme, setTheme } from './theme.js';
 import { t, tx, has } from './i18n.js';
+import { LEGAL_DOCS, legalPath } from './legal.js';
 
 const root = () => document.getElementById('app');
 
@@ -90,8 +91,6 @@ function publicFooter() {
   const info = state.info || {};
   const support = [];
   if (info.support_email) support.push(h('li', null, h('a', { href: `mailto:${info.support_email}`, 'data-external': '' }, info.support_email)));
-  if (info.terms_url) support.push(h('li', null, h('a', { href: info.terms_url, target: '_blank', rel: 'noopener noreferrer' }, t('layout.footer.terms'))));
-  if (info.privacy_url) support.push(h('li', null, h('a', { href: info.privacy_url, target: '_blank', rel: 'noopener noreferrer' }, t('layout.footer.privacy'))));
   if (!support.length) support.push(h('li', { class: 'faint' }, t('layout.footer.ask_admin')));
   const logged = isLoggedIn();
   return h('footer', { class: 'site-footer' },
@@ -110,7 +109,9 @@ function publicFooter() {
               registrationOpen() ? h('li', null, h('a', { href: '/signup' }, t('common.sign_up'))) : null,
               h('li', null, h('a', { href: '/forgot-password' }, t('layout.footer.forgot_password'))),
             ])),
-        h('div', null, h('h3', null, t('layout.footer.support')), h('ul', null, support))),
+        h('div', null, h('h3', null, t('layout.footer.support')), h('ul', null, support)),
+        h('div', null, h('h3', null, t('layout.footer.legal')), h('ul', null,
+          Object.values(LEGAL_DOCS).map((doc) => h('li', null, h('a', { href: doc.path }, t(doc.title))))))),
       h('div', { class: 'footer-bottom' },
         h('span', null,
           `© ${new Date().getFullYear()} `,
@@ -129,8 +130,9 @@ function authShell(content) {
     h('main', { class: 'auth-main', id: 'content' }, content),
     h('div', { class: 'auth-bottom' },
       `Termoak ${info.version || ''}`,
-      info.terms_url ? [' · ', h('a', { href: info.terms_url, target: '_blank', rel: 'noopener noreferrer' }, t('layout.auth.terms'))] : null,
-      info.privacy_url ? [' · ', h('a', { href: info.privacy_url, target: '_blank', rel: 'noopener noreferrer' }, t('layout.footer.privacy'))] : null,
+      // New tab: these pages often have a half-filled form.
+      ' · ', h('a', { href: legalPath('terms'), target: '_blank', rel: 'noopener' }, t('layout.auth.terms')),
+      ' · ', h('a', { href: legalPath('privacy'), target: '_blank', rel: 'noopener' }, t('layout.footer.privacy')),
       ' · ', languagePicker({ small: true })));
 }
 
