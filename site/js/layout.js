@@ -91,7 +91,7 @@ function publicFooter() {
   const info = state.info || {};
   const support = [];
   if (info.support_email) support.push(h('li', null, h('a', { href: `mailto:${info.support_email}`, 'data-external': '' }, info.support_email)));
-  if (!support.length) support.push(h('li', { class: 'faint' }, t('layout.footer.ask_admin')));
+  if (!support.length) support.push(h('li', { class: 'faint' }, t('layout.footer.support_disabled')));
   const logged = isLoggedIn();
   return h('footer', { class: 'site-footer' },
     h('div', { class: 'container' },
@@ -116,7 +116,8 @@ function publicFooter() {
         h('span', null,
           `© ${new Date().getFullYear()} `,
           h('a', { href: 'https://termoak.com', 'data-external': '', rel: 'noopener' }, 'Ohz Digital SL'),
-          ` · ${t('layout.footer.version', { version: info.version || '—' })}`),
+          ` · ${t('layout.footer.version', { version: info.version || '—' })} · `,
+          h('a', { href: 'https://github.com/TermoakSSH', 'data-external': '', rel: 'noopener' }, t('layout.footer.github'))),
         h('div', { class: 'footer-controls' }, languagePicker({ small: true }), themeSwitch()))));
 }
 
