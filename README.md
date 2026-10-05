@@ -20,7 +20,7 @@ the downloads page).
 | `site/locales/<lang>.json` | Translations |
 | `site/legal/<lang>/` | Terms of Use, Privacy Policy and Legal notice (`terms.html`, `privacy.html`, `legal.html`), shown at `/terms`, `/privacy` and `/legal` (English when a language has no copy). Their version and date are in `site/js/legal.js` |
 | `site/seo.json` | Search engines and link previews: title and description of each public page in each language, the languages with their own URLs, the preview image and the structured data (JSON-LD). Read by `site/js/seo.js` and by the build |
-| `site/robots.txt`, `site/.well-known/security.txt`, `site/favicon.*`, `site/apple-touch-icon.png`, `site/site.webmanifest`, `site/icons/`, `site/og-image.png` | Served by the server at the root of the site (`/robots.txt`...) and under `/assets/` |
+| `site/robots.txt`, `site/.well-known/security.txt`, `site/.well-known/assetlinks.json` (Android App Links: lets the app open the `/join/` links), `site/favicon.*`, `site/apple-touch-icon.png`, `site/site.webmanifest`, `site/icons/`, `site/og-image.png` | Served by the server at the root of the site (`/robots.txt`...) and under `/assets/` |
 | `scripts/` | Build (`build.sh`, `prerender.mjs`: sitemap and prerendered pages), image generation (`brand-images.mjs`) and the translation check |
 
 ## Running it locally

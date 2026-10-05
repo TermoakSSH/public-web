@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.termoak",
+      "sha256_cert_fingerprints": [
+        "39:2C:20:8A:05:FB:96:6C:38:FA:36:D3:85:3F:B8:0E:DD:47:39:D2:8D:FD:1D:27:EA:7E:BA:68:FC:1F:47:48"
+      ]
+    }
+  }
+]
