@@ -117,6 +117,7 @@
   "duration.hours": "%{h} h %{m} min",
   "duration.minutes": "%{m} min",
   "duration.seconds": "%{s} s",
+  "env.banner": "%{env} · PRE-PRODUCCIÓN · entorno de pruebas — los datos pueden borrarse en cualquier momento",
   "error.ai_budget_exceeded": "Has gastado el crédito de IA de este mes. Añade tu propia clave de API para seguir usando la IA.",
   "error.ai_key_required": "Añade en tu cuenta una clave de API de un proveedor de IA para usar la IA.",
   "error.ai_settings_link": "Ir a Cuenta → IA",

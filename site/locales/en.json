@@ -117,6 +117,7 @@
   "duration.hours": "%{h} h %{m} min",
   "duration.minutes": "%{m} min",
   "duration.seconds": "%{s} s",
+  "env.banner": "%{env} · PRE-PRODUCTION · test environment — data may be reset at any time",
   "error.ai_budget_exceeded": "You've used up this month's AI credit. Add your own API key to keep using the AI.",
   "error.ai_key_required": "Add an API key for an AI provider in your account to use the AI.",
   "error.ai_settings_link": "Go to Account → AI",

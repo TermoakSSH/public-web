@@ -331,9 +331,32 @@ export function mount(type, content, { nav, full = false, userId } = {}) {
     if (title) title.focus({ preventScroll: true });
   }
   mounted = true;
+  environmentBanner();
 }
 
 let mounted = false;
+
+/**
+ * Non-production servers (`[server] environment` in their config, e.g.
+ * next.termoak.com) get a fixed banner on every page and "[PRE]" in front of
+ * the tab title, so nobody mistakes them for termoak.com.
+ */
+function environmentBanner() {
+  const env = state.info && state.info.environment;
+  if (!env) return;
+  if (!document.getElementById('env-banner')) {
+    const label = t('env.banner', { env: String(env).toUpperCase() });
+    document.body.prepend(h('div', { id: 'env-banner', class: 'env-banner', role: 'note' }, label));
+    document.body.classList.add('has-env-banner');
+    const prefix = '[PRE] ';
+    const mark = () => {
+      if (!document.title.startsWith(prefix)) document.title = prefix + document.title;
+    };
+    mark();
+    const title = document.querySelector('title');
+    if (title) new MutationObserver(mark).observe(title, { childList: true });
+  }
+}
 
 /** Forces the layout to be rebuilt next time (e.g. after switching user or language). */
 export function resetLayout() {
