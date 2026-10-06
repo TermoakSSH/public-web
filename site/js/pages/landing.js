@@ -1,4 +1,5 @@
-// Landing: headline, terminal mockup, features, steps and final call to action.
+// Landing: headline, terminal mockup, features, desktop screenshots, steps and
+// final call to action.
 
 import { h } from '../dom.js';
 import { icon } from '../icons.js';
@@ -116,6 +117,66 @@ function features() {
           f.extra ? f.extra() : null)))));
 }
 
+/** Desktop app screenshots (1440×900 WebP, plus a 720 px one for phones). */
+const SCREENS = ['split-view', 'hosts', 'host-editor', 'context-menu', 'hosts-light'];
+
+function screenImage(name) {
+  const base = `/img/screens/desktop-${name}`;
+  return {
+    src: `${base}.webp`,
+    srcset: `${base}-720.webp 720w, ${base}.webp 1440w`,
+    alt: t(`landing.screens.${name}.alt`),
+  };
+}
+
+function screens() {
+  const first = screenImage(SCREENS[0]);
+  const img = h('img', {
+    class: 'screen-img', src: first.src, srcset: first.srcset, alt: first.alt,
+    sizes: '(max-width: 1180px) 100vw, 1120px', width: '1440', height: '900',
+    loading: 'lazy', decoding: 'async',
+  });
+  const caption = h('p', { class: 'screen-caption', 'aria-live': 'polite' }, t(`landing.screens.${SCREENS[0]}.caption`));
+  const tabs = [];
+  const select = (i, focus) => {
+    const name = SCREENS[i];
+    const next = screenImage(name);
+    img.srcset = next.srcset;
+    img.src = next.src;
+    img.alt = next.alt;
+    caption.textContent = t(`landing.screens.${name}.caption`);
+    tabs.forEach((tab, j) => {
+      tab.setAttribute('aria-selected', String(i === j));
+      tab.tabIndex = i === j ? 0 : -1;
+    });
+    if (focus) tabs[i].focus();
+  };
+  SCREENS.forEach((name, i) => {
+    tabs.push(h('button', {
+      class: 'screen-tab', type: 'button', role: 'tab', id: `screen-tab-${name}`,
+      'aria-controls': 'screen-panel', 'aria-selected': String(i === 0), tabindex: i === 0 ? '0' : '-1',
+      onClick: () => select(i, false),
+      onKeydown: (e) => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        select((i + step + SCREENS.length) % SCREENS.length, true);
+      },
+    }, t(`landing.screens.${name}.tab`)));
+  });
+  return h('section', { class: 'section-block', id: 'screenshots', 'aria-labelledby': 'screens-title' },
+    h('div', { class: 'container' },
+      h('div', { class: 'section-intro' },
+        h('span', { class: 'eyebrow' }, t('landing.screens.eyebrow')),
+        h('h2', { id: 'screens-title' }, t('landing.screens.title')),
+        h('p', null, t('landing.screens.lead'))),
+      h('div', { class: 'screen-tabs', role: 'tablist', 'aria-label': t('landing.screens.tabs_label') }, tabs),
+      h('figure', { class: 'screen-frame', id: 'screen-panel', role: 'tabpanel' },
+        h('div', { class: 'screen-chrome', 'aria-hidden': 'true' }, h('span'), h('span'), h('span')),
+        img),
+      caption));
+}
+
 function steps() {
   const items = [
     ['user-plus', 'account'],
@@ -158,5 +219,5 @@ export function render() {
           h('li', null, icon('check', { size: 15 }), t('landing.hero.meta.platforms')),
           h('li', null, icon('check', { size: 15 }), t('landing.hero.meta.source')))),
       h('div', { class: 'hero-visual' }, terminalMockup())));
-  return h('div', { class: 'landing' }, hero, features(), steps(), ctaBand());
+  return h('div', { class: 'landing' }, hero, features(), screens(), steps(), ctaBand());
 }
