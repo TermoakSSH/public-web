@@ -121,7 +121,7 @@ function features() {
 const SCREENS = ['split-view', 'hosts', 'host-editor', 'context-menu', 'hosts-light'];
 
 function screenImage(name) {
-  const base = `/img/screens/desktop-${name}`;
+  const base = `/assets/img/screens/desktop-${name}`;
   return {
     src: `${base}.webp`,
     srcset: `${base}-720.webp 720w, ${base}.webp 1440w`,
