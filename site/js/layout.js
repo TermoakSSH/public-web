@@ -144,9 +144,11 @@ function authShell(content) {
 const appNav = () => [
   ['/app', t('nav.home'), 'home', 'home'],
   ['/app/sessions', t('nav.sessions'), 'terminal', 'sessions'],
+  // Vaults: only on servers that have them (`/info` → `features.vaults`).
+  state.info && state.info.features && state.info.features.vaults ? ['/app/vaults', t('nav.vaults'), 'vault', 'vaults'] : null,
   ['/app/teams', t('nav.teams'), 'users', 'teams'],
   ['/app/account', t('nav.account'), 'user', 'account'],
-];
+].filter(Boolean);
 
 // Name of the account's plan (`plans.<id>.name`, else the server's name).
 function planName() {
