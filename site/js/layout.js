@@ -174,6 +174,7 @@ function userMenu(placement) {
       { header: u.email || '' },
       { label: t('layout.my_account'), icon: 'user', href: '/app/account' },
       { label: t('layout.menu.security'), icon: 'shield', href: '/app/account/security' },
+      { label: t('layout.menu.sessions'), icon: 'laptop', href: '/app/account/devices' },
       { label: t('layout.menu.ai'), icon: 'sparkles', href: '/app/account/ai' },
       { label: t('layout.menu.plan'), icon: 'card', href: '/app/account/plan' },
       { label: t('layout.download_apps'), icon: 'download', href: localePath('/download') },
