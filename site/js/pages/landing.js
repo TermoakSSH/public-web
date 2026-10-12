@@ -1,11 +1,11 @@
-// Landing: headline, terminal mockup, features, desktop screenshots, steps and
-// final call to action.
+// Landing: headline, terminal mockup, features, desktop and mobile
+// screenshots, steps and final call to action.
 
 import { h } from '../dom.js';
 import { icon } from '../icons.js';
 import { isLoggedIn, registrationOpen } from '../session.js';
 import { avatar } from '../ui.js';
-import { t } from '../i18n.js';
+import { getLanguage, t } from '../i18n.js';
 import { localePath } from '../seo.js';
 
 /** Main buttons depending on the state (signed in, registration open). */
@@ -177,6 +177,38 @@ function screens() {
       caption));
 }
 
+/** Mobile app screenshots (the Android app's store ones, in English and
+ *  Spanish): phones at 540×1080 and the 10" tablet at 1600×1000 (+ 800 px). */
+const PHONES = ['vault', 'terminal', 'copilot', 'ai', 'files'];
+
+function mobileScreens() {
+  const lang = getLanguage() === 'es' ? 'es' : 'en';
+  const base = '/assets/img/screens';
+  const tablet = h('figure', { class: 'tablet-frame' },
+    h('img', {
+      src: `${base}/tablet-split-${lang}.webp`,
+      srcset: `${base}/tablet-split-${lang}-800.webp 800w, ${base}/tablet-split-${lang}.webp 1600w`,
+      sizes: '(max-width: 960px) 100vw, 920px', width: '1600', height: '1000',
+      alt: t('landing.mobile.tablet.alt'), loading: 'lazy', decoding: 'async',
+    }));
+  const phones = PHONES.map((name) => h('figure', { class: 'phone-shot' },
+    h('div', { class: 'phone-frame' },
+      h('img', {
+        src: `${base}/mobile-${name}-${lang}.webp`, width: '540', height: '1080',
+        alt: t(`landing.mobile.${name}.alt`), loading: 'lazy', decoding: 'async',
+      })),
+    h('figcaption', null, t(`landing.mobile.${name}.caption`))));
+  return h('section', { class: 'section-block', id: 'mobile', 'aria-labelledby': 'mobile-title' },
+    h('div', { class: 'container' },
+      h('div', { class: 'section-intro' },
+        h('span', { class: 'eyebrow' }, t('landing.mobile.eyebrow')),
+        h('h2', { id: 'mobile-title' }, t('landing.mobile.title')),
+        h('p', null, t('landing.mobile.lead'))),
+      tablet,
+      h('p', { class: 'screen-caption' }, t('landing.mobile.tablet.caption')),
+      h('div', { class: 'phone-row' }, phones)));
+}
+
 function steps() {
   const items = [
     ['user-plus', 'account'],
@@ -219,5 +251,5 @@ export function render() {
           h('li', null, icon('check', { size: 15 }), t('landing.hero.meta.platforms')),
           h('li', null, icon('check', { size: 15 }), t('landing.hero.meta.source')))),
       h('div', { class: 'hero-visual' }, terminalMockup())));
-  return h('div', { class: 'landing' }, hero, features(), screens(), steps(), ctaBand());
+  return h('div', { class: 'landing' }, hero, features(), screens(), mobileScreens(), steps(), ctaBand());
 }
