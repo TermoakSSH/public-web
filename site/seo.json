@@ -150,7 +150,7 @@
         "priceCurrency": "EUR"
       },
       "publisher": { "@id": "https://termoak.com/#organization" },
-      "sameAs": ["https://github.com/TermoakSSH"]
+      "sameAs": ["https://github.com/TermoakSSH", "https://play.google.com/store/apps/details?id=com.termoak"]
     }
   }
 }

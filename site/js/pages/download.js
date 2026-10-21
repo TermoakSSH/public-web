@@ -8,7 +8,7 @@ import { icon } from '../icons.js';
 import { api } from '../api.js';
 import { detectOS, fmtSize, osLabel } from '../format.js';
 import { alertBox, badge, copyField, errorState, loadingState } from '../ui.js';
-import { t } from '../i18n.js';
+import { getLanguage, t } from '../i18n.js';
 
 const DESKTOP = ['windows', 'macos', 'linux'];
 const OS_ICON = { windows: 'windows', macos: 'apple', linux: 'linux', any: 'package' };
@@ -64,6 +64,14 @@ function fileRow(f) {
     h('a', { class: 'btn btn-sm btn-icon', href: f.url, 'data-external': '', 'aria-label': t('download.file_aria', { name: f.name }), title: t('common.download') }, icon('download', { size: 16 })));
 }
 
+/** The Android app on Google Play (in the page's language). */
+export function playUrl() {
+  return `https://play.google.com/store/apps/details?id=com.termoak&hl=${getLanguage() === 'es' ? 'es' : 'en'}`;
+}
+
+/** Termoak's own F-Droid repository (the GitHub APKs, same signature). */
+const FDROID_URL = 'https://pkg.termoak.com/fdroid/repo';
+
 /** Published Android APK, if any. */
 function androidApk(files) {
   return files.find((f) => f.os === 'android' && /\.apk$/i.test(f.name)) || null;
@@ -81,7 +89,14 @@ function featured(os, files, version, components) {
   if (apk) version = components[os] ? components[os].version : version;
   const label = osLabel(os);
   let actions;
-  if (file) {
+  if (os === 'android') {
+    actions = [
+      h('a', { class: 'btn btn-primary btn-lg', href: playUrl(), 'data-external': '' }, icon('google-play', { size: 18 }), t('download.android.get_on_play')),
+      file
+        ? h('a', { class: 'small center', href: file.url, 'data-external': '' }, t('download.android.or_apk', { size: fmtSize(file.size) }))
+        : null,
+    ];
+  } else if (file) {
     actions = [
       h('a', { class: 'btn btn-primary btn-lg', href: file.url, 'data-external': '' }, icon('download', { size: 18 }), t('download.featured.download_for', { os: label })),
       h('span', { class: 'small muted center' }, `${formatLabel(file.name)}${archLabel(file.name) ? ` · ${archLabel(file.name)}` : ''} · ${fmtSize(file.size)}`),
@@ -93,7 +108,9 @@ function featured(os, files, version, components) {
     h('div', { class: 'os-logo' }, icon(mobile ? 'phone' : OS_ICON[os] || 'laptop', { size: 34 })),
     h('div', null,
       h('h2', { id: 'featured-download' }, mobile || file ? t('download.featured.title_for', { os: label }) : t('download.featured.title_desktop')),
-      h('p', null, mobile && !file
+      h('p', null, os === 'android'
+        ? t('download.android.featured_text')
+        : mobile && !file
         ? t('download.featured.mobile_soon', { os: label })
         : file
           ? t('download.featured.detected', { version: (file && file.version) || version, os: label })
@@ -137,17 +154,19 @@ function mobileSection(files = [], components = {}, currentOs = null) {
       h('a', { class: 'btn btn-primary btn-block', href: ipa.url, 'data-external': '' }, icon('download', { size: 16 }), t('download.download_size', { size: fmtSize(ipa.size) })),
       h('span', { class: 'small muted center' }, t('download.ios.unsigned')))
     : card('apple', t('download.ios.name'), t('download.ios.soon'), 'ios');
+  // Google Play first; the APK (GitHub) and the F-Droid repository as well,
+  // all signed with the same key: any of them updates the others.
   const apk = androidApk(files);
-  const android = apk
-    ? h('article', { class: ['card os-card', currentOs === 'android' && 'is-current'] },
-      h('div', { class: 'os-card-head' },
-        h('span', { class: 'os-logo' }, icon('android', { size: 22 })),
-        h('div', { class: 'grow' }, h('h3', null, 'Android'), h('span', { class: 'small muted' }, t('download.android.requirements'))),
-        components.android ? h('span', { class: 'badge' }, `v${components.android.version}`) : null),
-      h('a', { class: 'btn btn-primary btn-block', href: apk.url, 'data-external': '' }, icon('download', { size: 16 }), t('download.download_size', { size: fmtSize(apk.size) })),
-      h('span', { class: 'small muted center' }, t('download.android.unknown_sources')))
-    : card('android', 'Android', t('download.android.soon'), 'android');
-  return h('section', { class: 'section', 'aria-labelledby': 'mobile-title' },
+  const android = h('article', { class: ['card os-card', currentOs === 'android' && 'is-current'] },
+    h('div', { class: 'os-card-head' },
+      h('span', { class: 'os-logo' }, icon('android', { size: 22 })),
+      h('div', { class: 'grow' }, h('h3', null, 'Android'), h('span', { class: 'small muted' }, t('download.android.requirements'))),
+      components.android ? h('span', { class: 'badge' }, `v${components.android.version}`) : null),
+    h('a', { class: 'btn btn-primary btn-block', href: playUrl(), 'data-external': '' }, icon('google-play', { size: 16 }), t('download.android.get_on_play')),
+    apk ? h('a', { class: 'btn btn-outline btn-block', href: apk.url, 'data-external': '' }, icon('download', { size: 16 }), t('download.android.apk', { size: fmtSize(apk.size) })) : null,
+    h('span', { class: 'small muted center' }, apk ? t('download.android.unknown_sources') : null,
+      ' ', h('a', { href: FDROID_URL, 'data-external': '' }, t('download.android.fdroid'))));
+  return h('section', { class: 'section', id: 'mobile', 'aria-labelledby': 'mobile-title' },
     h('div', { class: 'section-head' }, h('h2', { id: 'mobile-title' }, icon('phone', { size: 20 }), t('download.mobile.title'))),
     h('div', { class: 'mobile-apps' },
       ios,

@@ -7,6 +7,7 @@ import { isLoggedIn, registrationOpen } from '../session.js';
 import { avatar } from '../ui.js';
 import { getLanguage, t } from '../i18n.js';
 import { localePath } from '../seo.js';
+import { playUrl } from './download.js';
 
 /** Main buttons depending on the state (signed in, registration open). */
 function ctaButtons({ large = true } = {}) {
@@ -203,7 +204,10 @@ function mobileScreens() {
       h('div', { class: 'section-intro' },
         h('span', { class: 'eyebrow' }, t('landing.mobile.eyebrow')),
         h('h2', { id: 'mobile-title' }, t('landing.mobile.title')),
-        h('p', null, t('landing.mobile.lead'))),
+        h('p', null, t('landing.mobile.lead')),
+        h('div', { class: 'mobile-actions' },
+          h('a', { class: 'btn btn-primary', href: playUrl(), 'data-external': '' }, icon('google-play', { size: 17 }), t('landing.mobile.play')),
+          h('a', { class: 'btn btn-outline', href: `${localePath('/download')}#mobile` }, t('landing.mobile.more')))),
       tablet,
       h('p', { class: 'screen-caption' }, t('landing.mobile.tablet.caption')),
       h('div', { class: 'phone-row' }, phones)));

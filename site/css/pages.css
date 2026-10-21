@@ -601,6 +601,14 @@
   }
 }
 
+.mobile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
 /* Mobile screenshots: a tablet and a row of phones (scrolls sideways on
    narrow screens). */
 .tablet-frame {
